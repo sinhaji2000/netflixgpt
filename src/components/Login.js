@@ -1,11 +1,23 @@
 import Header from "./Header";
 import React from "react";
-
+import { useState, useRef } from "react";
+import { cheakValidData } from "../utils/validate";
 const LoginIn = () => {
-  const [isSignInForm, setIsSignInForm] = React.useState(true);
+  const [isSignInForm, setIsSignInForm] = useState(true);
+  const [message, setMessage] = React.useState(null);
+  const email = useRef(null);
+  const password = useRef(null);
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
+  };
+  const handleLogin = () => {
+    console.log(email.current.value);
+    console.log(password.current.value);
+
+    const message = cheakValidData(email.current.value, password.current.value);
+    setMessage(message);
+    console.log(message);
   };
   return (
     <div className="relative h-screen">
@@ -18,6 +30,7 @@ const LoginIn = () => {
         />
       </div>
       <form
+        onSubmit={(e) => e.preventDefault()}
         className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white rounded"
         style={{
           top: "4rem",
@@ -40,18 +53,22 @@ const LoginIn = () => {
           />
         )}
         <input
+          ref={email}
           className="mb-3 p-2 w-full rounded border border-gray-300 text-black"
           type="email"
           placeholder="Email"
           required
         />
         <input
+          ref={password}
           className="mb-3 p-2 w-full rounded border border-gray-300 text-black"
           type="password"
           placeholder="Password"
           required
         />
+        <p className="text-red-600">{message}</p>
         <button
+          onClick={handleLogin}
           className="w-full py-2 bg-red-600 hover:bg-red-700 rounded text-white font-bold"
           type="submit"
         >
