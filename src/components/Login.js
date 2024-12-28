@@ -1,12 +1,26 @@
 import Header from "./Header";
 import React from "react";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { cheakValidData } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { setUser } from "../utils/userSlice";
+import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
+// import { setUser } from "../redux/userSlice";
 const LoginIn = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [message, setMessage] = React.useState(null);
   const email = useRef(null);
   const password = useRef(null);
+  const displayName = useRef(null);
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
@@ -17,7 +31,84 @@ const LoginIn = () => {
 
     const message = cheakValidData(email.current.value, password.current.value);
     setMessage(message);
-    console.log(message);
+    if (message) {
+      return;
+    }
+
+    if (!isSignInForm) {
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+        displayName.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+          updateProfile(user, {
+            displayName: displayName.current.value,
+            photoURL: "https://avatars.githubusercontent.com/u/90685854?v=4",
+          })
+            .then(() => {
+              // Profile updated!
+              // ...
+
+              // TO-DO
+              dispatch(
+                setUser({
+                  uid: user.uid,
+                  email: user.email,
+                  displayName: displayName.current.value,
+                  photoURL:
+                    "https://avatars.githubusercontent.com/u/90685854?v=4",
+                })
+              );
+              navigate("/browse");
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+              console.log(error);
+            });
+          console.log(user);
+
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setMessage(errorMessage + "- " + errorCode);
+          // ..
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          // dispatch(
+          //   setUser({
+          //     uid: user.uid,
+          //     email: user.email,
+          //     displayName: user.displayName,
+          //     photoURL: user.photoURL,
+          //   })
+          // );
+          navigate("/browse");
+
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
+          console.log(error);
+        });
+    }
   };
   return (
     <div className="relative h-screen">
@@ -46,12 +137,14 @@ const LoginIn = () => {
         </h1>
         {!isSignInForm && (
           <input
+            ref={displayName}
             className="mb-3 p-2 w-full rounded border border-gray-300 text-black"
             type="text"
             placeholder="Name"
             required
           />
         )}
+
         <input
           ref={email}
           className="mb-3 p-2 w-full rounded border border-gray-300 text-black"
