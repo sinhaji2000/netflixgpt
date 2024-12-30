@@ -1,7 +1,6 @@
 import Header from "./Header";
 import React from "react";
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { cheakValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
@@ -14,7 +13,7 @@ import { useDispatch } from "react-redux";
 // import { setUser } from "../redux/userSlice";
 const LoginIn = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const [message, setMessage] = React.useState(null);
@@ -64,7 +63,6 @@ const LoginIn = () => {
                     "https://avatars.githubusercontent.com/u/90685854?v=4",
                 })
               );
-              navigate("/browse");
             })
             .catch((error) => {
               // An error occurred
@@ -89,18 +87,7 @@ const LoginIn = () => {
       )
         .then((userCredential) => {
           // Signed in
-          const user = userCredential.user;
-          // dispatch(
-          //   setUser({
-          //     uid: user.uid,
-          //     email: user.email,
-          //     displayName: user.displayName,
-          //     photoURL: user.photoURL,
-          //   })
-          // );
-          navigate("/browse");
-
-          console.log(user);
+          // const user = userCredential.user;
           // ...
         })
         .catch((error) => {
