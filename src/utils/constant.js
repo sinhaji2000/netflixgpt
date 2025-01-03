@@ -3,3 +3,14 @@ export const NETFLIX_LOGO =
 
 export const USER_LOGO =
   "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png";
+
+export const options = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization: process.env.REACT_APP_TMDB_API_KEY,
+  },
+};
+
+export const TMDB_NOWPLAYING_URL =
+  "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
