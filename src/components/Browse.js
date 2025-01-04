@@ -6,7 +6,7 @@ import SecondaryContainer from "./SecondaryContainter";
 const Browse = () => {
   useNowPlayingMovies();
   return (
-    <div className="flex">
+    <div>
       <Header />
       <MainContainer />
       <SecondaryContainer />
