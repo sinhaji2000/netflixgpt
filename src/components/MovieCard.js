@@ -9,7 +9,7 @@ const MovieCard = ({ poster_path }) => {
         <img
           alt="poster"
           src={IMAGE_URL + poster_path}
-          className="w-36 h-auto rounded-lg shadow-lg object-contain"
+          className="w-36 h-auto  shadow-lg object-contain"
         />
       ) : (
         <div className="w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center">

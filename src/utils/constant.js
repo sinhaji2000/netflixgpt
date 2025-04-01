@@ -15,6 +15,8 @@ export const options = {
 export const TMDB_NOWPLAYING_URL =
 
   "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
+  export const TMDB_POPULAR_URL =
+    "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
 
 export const IMAGE_URL = "https://image.tmdb.org/t/p/w300//";
 
